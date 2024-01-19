@@ -6,6 +6,7 @@ on:
     paths: 
       - 'agent/**'
       - 'version.yml'
+  workflow_dispatch: 
 
 jobs:
   build:
@@ -106,11 +107,11 @@ jobs:
       #     go build -o utmstack_updater_service.exe -v .
       #     signtool sign /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 /f "$SIGN_CERT" /csp "eToken Base Cryptographic Provider" /k "[{{${SIGN_KEY}}}]=${SIGN_CONTAINER}" "utmstack_updater_service.exe"
   
-      - name: Run Python script for deploy to Google
-        working-directory: ".github/scripts"
-        # env:
-          # GCP_KEY: ${{ secrets.GCP_KEY }}
-        run: |
-          TAG=$(echo $GITHUB_REF | sed 's/refs\/tags\///g')
-          echo "Deploying $TAG to $DEPLOY_ENV"
-        # python agent-deploy.py $TAG $DEPLOY_ENV
+      # - name: Run Python script for deploy to Google
+      #   working-directory: ".github/scripts"
+      #   # env:
+      #     # GCP_KEY: ${{ secrets.GCP_KEY }}
+      #   run: |
+      #     TAG=$(echo $GITHUB_REF | sed 's/refs\/tags\///g')
+      #     echo "Deploying $TAG to $DEPLOY_ENV"
+      #   # python agent-deploy.py $TAG $DEPLOY_ENV
