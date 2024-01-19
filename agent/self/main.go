@@ -66,5 +66,5 @@ func main() {
 	if err != nil {
 		h.FatalError("error removing %s: %v", constants.SERV_LOCK, err)
 	}
-	h.Info("UTMStackUpdater updated correctly")
+	h.Info("UTMStackUpdater updated correctly 111")
 }
