@@ -50,18 +50,7 @@ jobs:
           SIGN_CONTAINER: ${{ secrets.SIGN_CONTAINER }}
         run: |
           go build -o utmstack_agent_service.exe -v ./agent
-          signtool sign /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 /f "$SIGN_CERT" /csp "eToken Base Cryptographic Provider" /k "[{{${SIGN_KEY}}}]=${SIGN_CONTAINER}" "agent/utmstack_agent_service.exe"
           go build -o utmstack_agent_installer.exe -v ./installer
-          signtool sign /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 /f "$SIGN_CERT" /csp "eToken Base Cryptographic Provider" /k "[{{${SIGN_KEY}}}]=${SIGN_CONTAINER}" "installer/utmstack_agent_installer.exe"
           go build -o utmstack_redline_service.exe -v ./redline
-          signtool sign /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 /f "$SIGN_CERT" /csp "eToken Base Cryptographic Provider" /k "[{{${SIGN_KEY}}}]=${SIGN_CONTAINER}" "redline/utmstack_redline_service.exe"
           go build -o utmstack_updater_service.exe -v ./updater
-          signtool sign /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 /f "$SIGN_CERT" /csp "eToken Base Cryptographic Provider" /k "[{{${SIGN_KEY}}}]=${SIGN_CONTAINER}" "updater/utmstack_updater_service.exe"
            
-      - name: Run Python script for deploy to Google
-        working-directory: ".github/scripts"
-        env:
-          GCP_KEY: ${{ secrets.GCP_KEY }}
-        run: |
-          Write-Host "Deploying Agent to $env:DEPLOY_ENV"
-          python agent-deploy.py  $env:DEPLOY_ENV
