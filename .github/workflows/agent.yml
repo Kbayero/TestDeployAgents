@@ -38,7 +38,7 @@ jobs:
           GOOS: linux
           GOARCH: amd64
         run: |
-          cd go build -o utmstack_agent_service -v ./agent
+          go build -o utmstack_agent_service -v ./agent
           go build -o utmstack_agent_installer -v ./installer
           go build -o utmstack_redline_service -v ./redline
           go build -o utmstack_updater_service -v ./updater
