@@ -33,24 +33,24 @@ jobs:
           }
       
       - name: Build for Linux
-        working-directory: ${{ github.workspace }}/agent
+        working-directory: ./agent
         env:
           GOOS: linux
           GOARCH: amd64
         run: |
-          go build -o utmstack_agent_service -v ./agent
-          go build -o utmstack_agent_installer -v ./installer
-          go build -o utmstack_redline_service -v ./redline
-          go build -o utmstack_updater_service -v ./updater
+          go build -o utmstack_agent_service -v ./agent/agent
+          go build -o utmstack_agent_installer -v ./agent/installer
+          go build -o utmstack_redline_service -v ./agent/redline
+          go build -o utmstack_updater_service -v ./agent/updater
 
       - name: Build and sign for Windows
-        working-directory: ${{ github.workspace }}/agent
+        working-directory: ./agent
         env:
           GOOS: windows
           GOARCH: amd64}
         run: |
-          go build -o utmstack_agent_service.exe -v ./agent
-          go build -o utmstack_agent_installer.exe -v ./installer
-          go build -o utmstack_redline_service.exe -v ./redline
-          go build -o utmstack_updater_service.exe -v ./updater
+          go build -o utmstack_agent_service.exe -v ./agent/agent
+          go build -o utmstack_agent_installer.exe -v ./agent/installer
+          go build -o utmstack_redline_service.exe -v ./agent/redline
+          go build -o utmstack_updater_service.exe -v ./agent/updater
            
