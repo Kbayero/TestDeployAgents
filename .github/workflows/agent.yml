@@ -20,16 +20,16 @@ jobs:
         run: |
           if ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'main') {
             Write-Host "Agent Deployment to DEV"
-            $env:DEPLOY_ENV = 'dev'
+            echo "DEPLOY_ENV=dev" >> $GITHUB_ENV
           } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'qa' ) {
             Write-Host "Agent Deployment to QA"
-            $env:DEPLOY_ENV = 'qa'
+            echo "DEPLOY_ENV=qa" >> $GITHUB_ENV
           } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'rc' ) {
             Write-Host "Agent Deployment to RC"
-            $env:DEPLOY_ENV = 'rc'
+            echo "DEPLOY_ENV=rc" >> $GITHUB_ENV'
           } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref }}" -match '^refs/tags/v') {
             Write-Host "Agent Deployment to RELEASE"
-            $env:DEPLOY_ENV = 'release'
+            echo "DEPLOY_ENV=release" >> $GITHUB_ENV
           }
       
       - name: Build for Linux
@@ -62,3 +62,4 @@ jobs:
         run: |
           Write-Host "Deploying Agent to $env:DEPLOY_ENV"
           python .github/scripts/agent-deploy.py  $env:DEPLOY_ENV
+        shell: pwsh
