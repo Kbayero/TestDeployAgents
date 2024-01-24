@@ -61,4 +61,4 @@ jobs:
           GCP_KEY: ${{ secrets.GCP_KEY }}
         run: |
           Write-Host "Deploying Agent to $env:DEPLOY_ENV"
-          python .github/scripts/agent-deploy.py  $env:DEPLOY_ENV
+          . python .github/scripts/agent-deploy.py  $env:DEPLOY_ENV
