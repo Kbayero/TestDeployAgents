@@ -26,7 +26,7 @@ jobs:
             echo "DEPLOY_ENV=qa" >> $GITHUB_ENV
           } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'rc' ) {
             Write-Host "Agent Deployment to RC"
-            echo "DEPLOY_ENV=rc" >> $GITHUB_ENV'
+            echo "DEPLOY_ENV=rc" >> $GITHUB_ENV
           } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref }}" -match '^refs/tags/v') {
             Write-Host "Agent Deployment to RELEASE"
             echo "DEPLOY_ENV=release" >> $GITHUB_ENV
