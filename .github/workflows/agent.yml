@@ -65,5 +65,5 @@ jobs:
           GCP_KEY: ${{ secrets.GCP_KEY }}
           DEPLOY_ENV: ${{needs.build.outputs.dev_env}}
         run: |
-          Write-Host "Deploying Agent to $env:DEPLOY_ENV"
-          C:\Users\YorjanderHernándezVe\AppData\Local\Programs\Python\Python311\python.exe .github/scripts/agent-deploy.py  $env:DEPLOY_ENV
+          Write-Host "Deploying Agent to $DEPLOY_ENV"
+          C:\Python27\python.exe .github/scripts/agent-deploy.py  $env:DEPLOY_ENV
