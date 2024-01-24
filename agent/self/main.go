@@ -14,7 +14,7 @@ import (
 var h = holmes.New("debug", constants.SERV_NAME)
 
 func main() {
-	// Get current path test8
+	// Get current path test9
 	path, err := utils.GetMyPath()
 	if err != nil {
 		h.FatalError("Failed to get current path: %v", err)
