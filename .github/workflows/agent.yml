@@ -18,13 +18,13 @@ jobs:
           if ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'main') {
             Write-Host "Agent Deployment to DEV"
             $env:DEPLOY_ENV = 'dev'
-          } elif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'qa' ) {
+          } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'qa' ) {
             Write-Host "Agent Deployment to QA"
             $env:DEPLOY_ENV = 'qa'
-          } elif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'rc' ) {
+          } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'rc' ) {
             Write-Host "Agent Deployment to RC"
             $env:DEPLOY_ENV = 'rc'
-          } elif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref }}" -match '^refs/tags/v') {
+          } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref }}" -match '^refs/tags/v') {
             Write-Host "Agent Deployment to RELEASE"
             $env:DEPLOY_ENV = 'release'
           }
