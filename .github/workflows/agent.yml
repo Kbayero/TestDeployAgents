@@ -11,59 +11,39 @@ jobs:
   build:
     name: Build
     runs-on: YORJANDER
-    outputs:
-          dev_env: ${{ steps.set-env.outputs.DEPLOY_ENV }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Determine Build Environment
+      - name: Build and sign agent services
         id: set-env
         run: |
           if ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'main') {
             Write-Host "Agent Deployment to DEV"
-            echo "DEPLOY_ENV=dev" >> "$GITHUB_OUTPUT"
+            $env:DEPLOY_ENV = "dev"
           } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'qa' ) {
             Write-Host "Agent Deployment to QA"
-            echo "DEPLOY_ENV=qa" >> "$GITHUB_OUTPUT"
+            $env:DEPLOY_ENV = "qa"
           } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'rc' ) {
             Write-Host "Agent Deployment to RC"
-            echo "DEPLOY_ENV=rc" >> "$GITHUB_OUTPUT"
+            $env:DEPLOY_ENV = "rc"
           } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref }}" -match '^refs/tags/v') {
             Write-Host "Agent Deployment to RELEASE"
-            echo "DEPLOY_ENV=release" >> "$GITHUB_OUTPUT"
+            $env:DEPLOY_ENV = "release"
           }
-        
-      
-      - name: Build for Linux
-        working-directory: ./agent
-        env:
-          GOOS: linux
-          GOARCH: amd64
-        run: |
+          $env:GOOS = "linux"
+          $env:GOARCH = "amd64"
           cd ${{ github.workspace }}/agent/agent; go build -o utmstack_agent_service -v .
           cd ${{ github.workspace }}/agent/installer; go build -o utmstack_agent_installer -v .
           cd ${{ github.workspace }}/agent/redline; go build -o utmstack_redline_service -v .
           cd ${{ github.workspace }}/agent/updater; go build -o utmstack_updater_service -v .
-
-      - name: Build and sign for Windows
-        working-directory: ./agent
-        env:
-          GOOS: windows
-          GOARCH: amd64
-        run: |
+          $env:GOOS = "windows"
           Write-Host "KEY: ${{ secrets.SIGN_KEY }}, CERT: ${{ env.SIGN_CERT }}, CONTAINER: ${{ secrets.SIGN_CONTAINER }}"
           cd ${{ github.workspace }}/agent/agent; go build -o utmstack_agent_service.exe -v .
           cd ${{ github.workspace }}/agent/installer; go build -o utmstack_agent_installer.exe -v .
           cd ${{ github.workspace }}/agent/redline; go build -o utmstack_redline_service.exe -v .
           cd ${{ github.workspace }}/agent/updater; go build -o utmstack_updater_service.exe -v .
-
-      - name: Run Python script for deploy to Google
-        working-directory: ".github/scripts"
-        env:
-          GCP_KEY: ${{ secrets.GCP_KEY }}
-          DEPLOY_ENV: ${{needs.build.outputs.dev_env}}
-        run: |
-          Write-Host "Deploying Agent to $DEPLOY_ENV"
-          C:\Python27\python.exe .github/scripts/agent-deploy.py  $env:DEPLOY_ENV
+          Write-Host "Deploying Agent to $env:DEPLOY_ENV"
+          $env:GCP_KEY = ${{ secrets.GCP_KEY }}
+          cd ${{ github.workspace }}/.github/scripts
+          C:\Python27\python.exe agent-deploy.py  $env:DEPLOY_ENV
