@@ -38,10 +38,10 @@ jobs:
           GOOS: linux
           GOARCH: amd64
         run: |
-          cd ${{ github.workspace }}/agent/agent && go build -o utmstack_agent_service -v .
-          cd ${{ github.workspace }}/agent/installer && go build -o utmstack_agent_installer -v .
-          cd ${{ github.workspace }}/agent/redline && go build -o utmstack_redline_service -v .
-          cd ${{ github.workspace }}/agent/updater && go build -o utmstack_updater_service -v .
+          cd ${{ github.workspace }}/agent/agent; go build -o utmstack_agent_service -v .
+          cd ${{ github.workspace }}/agent/installer; go build -o utmstack_agent_installer -v .
+          cd ${{ github.workspace }}/agent/redline; go build -o utmstack_redline_service -v .
+          cd ${{ github.workspace }}/agent/updater; go build -o utmstack_updater_service -v .
 
       - name: Build and sign for Windows
         working-directory: ./agent
@@ -49,8 +49,8 @@ jobs:
           GOOS: windows
           GOARCH: amd64
         run: |
-          cd ${{ github.workspace }}/agent/agent && go build -o utmstack_agent_service.exe -v .
-          cd ${{ github.workspace }}/agent/installer && go build -o utmstack_agent_installer.exe -v .
-          cd ${{ github.workspace }}/agent/redline && go build -o utmstack_redline_service.exe -v .
-          cd ${{ github.workspace }}/agent/updater && go build -o utmstack_updater_service.exe -v .
+          cd ${{ github.workspace }}/agent/agent; go build -o utmstack_agent_service.exe -v .
+          cd ${{ github.workspace }}/agent/installer; go build -o utmstack_agent_installer.exe -v .
+          cd ${{ github.workspace }}/agent/redline; go build -o utmstack_redline_service.exe -v .
+          cd ${{ github.workspace }}/agent/updater; go build -o utmstack_updater_service.exe -v .
            
