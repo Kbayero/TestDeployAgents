@@ -57,7 +57,8 @@ jobs:
 
       - name: Run Python script for deploy to Google
         working-directory: ".github/scripts"
+        env:
+          GCP_KEY: ${{ secrets.GCP_KEY }}
         run: |
           Write-Host "Deploying Agent to $env:DEPLOY_ENV"
-          $env:GCP_KEY = ${{ secrets.GCP_KEY }}
           python .github/scripts/agent-deploy.py  $env:DEPLOY_ENV
