@@ -10,21 +10,21 @@ on:
 jobs:
   build:
     name: Build
-    runs-on: signing
+    runs-on: YORJANDER
     steps:
       - name: Determine Build Environment
         id: set-env
         run: |
-          if (github.event_name -eq 'push' -and github.ref_name -eq 'main') {
+          if ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'main') {
             Write-Host "Agent Deployment to DEV"
             $env:DEPLOY_ENV = 'dev'
-          } elif (github.event_name -eq 'push' -and github.ref_name -eq 'qa' ) {
+          } elif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'qa' ) {
             Write-Host "Agent Deployment to QA"
             $env:DEPLOY_ENV = 'qa'
-          } elif (github.event_name -eq 'push' -and github.ref_name -eq 'rc' ) {
+          } elif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'rc' ) {
             Write-Host "Agent Deployment to RC"
             $env:DEPLOY_ENV = 'rc'
-          } elif (github.event_name -eq 'push' -and github.ref -match '^refs/tags/v') {
+          } elif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref }}" -match '^refs/tags/v') {
             Write-Host "Agent Deployment to RELEASE"
             $env:DEPLOY_ENV = 'release'
           }
