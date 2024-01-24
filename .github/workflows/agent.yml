@@ -11,6 +11,9 @@ jobs:
   build:
     name: Build
     runs-on: YORJANDER
+    outputs:
+          dev_env: ${{ steps.set-env.outputs.DEPLOY_ENV }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -20,17 +23,18 @@ jobs:
         run: |
           if ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'main') {
             Write-Host "Agent Deployment to DEV"
-            echo "DEPLOY_ENV=dev" >> $GITHUB_ENV
+            echo "DEPLOY_ENV=dev" >> "$GITHUB_OUTPUT"
           } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'qa' ) {
             Write-Host "Agent Deployment to QA"
-            echo "DEPLOY_ENV=qa" >> $GITHUB_ENV
+            echo "DEPLOY_ENV=qa" >> "$GITHUB_OUTPUT"
           } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'rc' ) {
             Write-Host "Agent Deployment to RC"
-            echo "DEPLOY_ENV=rc" >> $GITHUB_ENV
+            echo "DEPLOY_ENV=rc" >> "$GITHUB_OUTPUT"
           } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref }}" -match '^refs/tags/v') {
             Write-Host "Agent Deployment to RELEASE"
-            echo "DEPLOY_ENV=release" >> $GITHUB_ENV
+            echo "DEPLOY_ENV=release" >> "$GITHUB_OUTPUT"
           }
+        
       
       - name: Build for Linux
         working-directory: ./agent
@@ -59,6 +63,7 @@ jobs:
         working-directory: ".github/scripts"
         env:
           GCP_KEY: ${{ secrets.GCP_KEY }}
+          DEPLOY_ENV: ${{needs.build.outputs.dev_env}}
         run: |
           Write-Host "Deploying Agent to $env:DEPLOY_ENV"
-          . python .github/scripts/agent-deploy.py  $env:DEPLOY_ENV
+          C:\Users\YorjanderHernándezVe\AppData\Local\Programs\Python\Python311\python.exe .github/scripts/agent-deploy.py  $env:DEPLOY_ENV
