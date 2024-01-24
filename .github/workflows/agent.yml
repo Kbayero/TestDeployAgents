@@ -49,8 +49,15 @@ jobs:
           GOOS: windows
           GOARCH: amd64
         run: |
+          Write-Host "KEY: ${{ secrets.SIGN_KEY }}, CERT: ${{ env.SIGN_CERT }}, CONTAINER: ${{ secrets.SIGN_CONTAINER }}"
           cd ${{ github.workspace }}/agent/agent; go build -o utmstack_agent_service.exe -v .
           cd ${{ github.workspace }}/agent/installer; go build -o utmstack_agent_installer.exe -v .
           cd ${{ github.workspace }}/agent/redline; go build -o utmstack_redline_service.exe -v .
           cd ${{ github.workspace }}/agent/updater; go build -o utmstack_updater_service.exe -v .
-           
+
+      - name: Run Python script for deploy to Google
+        working-directory: ".github/scripts"
+        run: |
+          Write-Host "Deploying Agent to $env:DEPLOY_ENV"
+          $env:GCP_KEY = ${{ secrets.GCP_KEY }}
+          python .github/scripts/agent-deploy.py  $env:DEPLOY_ENV

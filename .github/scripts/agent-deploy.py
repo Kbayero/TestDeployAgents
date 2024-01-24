@@ -9,7 +9,7 @@ def main(environment):
 	gcp_key = json.loads(os.environ.get("GCP_KEY"))
 	storage_client = storage.Client.from_service_account_info(gcp_key)
 
-	bucket_name = "utmstack-updates"
+	bucket_name = "utmagent-test"
 	bucket = storage_client.bucket(bucket_name)
 
 	# Read utmstack version from version.yml
