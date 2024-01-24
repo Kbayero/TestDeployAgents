@@ -12,6 +12,9 @@ jobs:
     name: Build
     runs-on: YORJANDER
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Determine Build Environment
         id: set-env
         run: |
@@ -30,7 +33,7 @@ jobs:
           }
       
       - name: Build for Linux
-        working-directory: agent
+        working-directory: ./agent
         env:
           GOOS: linux
           GOARCH: amd64
@@ -41,7 +44,7 @@ jobs:
           go build -o utmstack_updater_service -v ./updater
 
       - name: Build and sign for Windows
-        working-directory: agent
+        working-directory: ./agent
         env:
           GOOS: windows
           GOARCH: amd64}
