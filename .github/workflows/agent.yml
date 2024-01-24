@@ -30,7 +30,7 @@ jobs:
           }
       
       - name: Build for Linux
-        working-directory: ./agent
+        working-directory: agent
         env:
           GOOS: linux
           GOARCH: amd64
@@ -41,13 +41,10 @@ jobs:
           go build -o utmstack_updater_service -v ./updater
 
       - name: Build and sign for Windows
-        working-directory: ./agent
+        working-directory: agent
         env:
           GOOS: windows
-          GOARCH: amd64
-          SIGN_KEY: ${{ secrets.SIGN_KEY }}
-          SIGN_CERT: ${{ env.SIGN_CERT }}
-          SIGN_CONTAINER: ${{ secrets.SIGN_CONTAINER }}
+          GOARCH: amd64}
         run: |
           go build -o utmstack_agent_service.exe -v ./agent
           go build -o utmstack_agent_installer.exe -v ./installer
