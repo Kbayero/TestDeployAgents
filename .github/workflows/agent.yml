@@ -22,26 +22,15 @@ jobs:
         run: |
           if ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'main') {
             Write-Host "Agent Deployment to DEV"
+            $env:DEPLOY_ENV = "dev"
           } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'qa' ) {
             Write-Host "Agent Deployment to QA"
+            $env:DEPLOY_ENV = "qa"
           } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'rc' ) {
             Write-Host "Agent Deployment to RC"
+            $env:DEPLOY_ENV = "rc"
           } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref }}" -match '^refs/tags/v') {
             Write-Host "Agent Deployment to RELEASE"
+            $env:DEPLOY_ENV = "release"
           }
-          $env:GOOS = "linux"
-          $env:GOARCH = "amd64"
-          cd ${{ github.workspace }}/agent/agent; go build -o utmstack_agent_service -v .
-          cd ${{ github.workspace }}/agent/installer; go build -o utmstack_agent_installer -v .
-          cd ${{ github.workspace }}/agent/redline; go build -o utmstack_redline_service -v .
-          cd ${{ github.workspace }}/agent/updater; go build -o utmstack_updater_service -v .
-          $env:GOOS = "windows"
-          Write-Host "KEY: ${{ secrets.SIGN_KEY }}, CERT: ${{ env.SIGN_CERT }}, CONTAINER: ${{ secrets.SIGN_CONTAINER }}"
-          cd ${{ github.workspace }}/agent/agent; go build -o utmstack_agent_service.exe -v .
-          cd ${{ github.workspace }}/agent/installer; go build -o utmstack_agent_installer.exe -v .
-          cd ${{ github.workspace }}/agent/redline; go build -o utmstack_redline_service.exe -v .
-          cd ${{ github.workspace }}/agent/updater; go build -o utmstack_updater_service.exe -v .
-          Write-Host "Deploying Agent to $env:DEPLOY_ENV"
-          $env:GCP_KEY = ${{ secrets.GCP_KEY }}
-          cd ${{ github.workspace }}/.github/scripts
-          C:\Python27\python.exe agent-deploy.py  $env:DEPLOY_ENV
+          Write-Host "Agent Deployment to $env:DEPLOY_ENV"
