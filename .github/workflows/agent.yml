@@ -19,6 +19,7 @@ jobs:
 
       - name: Build and sign agent services
         id: set-env
+        shell: pwsh
         run: |
           if ("${{ github.event_name }}" -eq "push" -and "${{ github.ref_name }}" -eq "main") {
             Write-Host "Agent Deployment to DEV"
