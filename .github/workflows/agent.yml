@@ -20,13 +20,13 @@ jobs:
       - name: Build and sign agent services
         id: set-env
         run: |
-          if ("${{ github.event_name }}" -eq "push" -and "${{ github.ref_name }}" -eq "main") {
+          if ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'main') {
             Write-Host "Agent Deployment to DEV"
-          } elseif ("${{ github.event_name }}" -eq "push" -and "${{ github.ref_name }}" -eq "qa" ) {
+          } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'qa' ) {
             Write-Host "Agent Deployment to QA"
-          } elseif ("${{ github.event_name }}" -eq "push" -and "${{ github.ref_name }}" -eq "rc" ) {
+          } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'rc' ) {
             Write-Host "Agent Deployment to RC"
-          } elseif ("${{ github.event_name }}" -eq "push" -and "${{ github.ref }}" -match "^refs/tags/v") {
+          } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref }}" -match '^refs/tags/v') {
             Write-Host "Agent Deployment to RELEASE"
           }
           $env:GOOS = "linux"
