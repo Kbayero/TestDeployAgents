@@ -33,4 +33,20 @@ jobs:
             Write-Host "Agent Deployment to RELEASE"
             $env:DEPLOY_ENV = "release"
           }
-          Write-Host "Agent Deployment to $env:DEPLOY_ENV"
+
+          cd ${{ github.workspace }}/agent/agent/configuration; (Get-Content const.go) | Foreach-Object { $_ -replace 'const REPLACE_KEY string = ""', 'const REPLACE_KEY string = "${{ secrets.AGENT_SECRET_PREFIX }}"' } | Set-Content const.go
+          
+          $env:GOOS = "linux"
+          $env:GOARCH = "amd64"
+          cd ${{ github.workspace }}/agent/agent; go build -o utmstack_agent_service -v .
+          cd ${{ github.workspace }}/agent/installer; go build -o utmstack_agent_installer -v .
+          cd ${{ github.workspace }}/agent/redline; go build -o utmstack_redline_service -v .
+          cd ${{ github.workspace }}/agent/updater; go build -o utmstack_updater_service -v .
+          
+          $env:GOOS = "windows"
+          cd ${{ github.workspace }}/agent/agent; go build -o utmstack_agent_service.exe -v .
+          cd ${{ github.workspace }}/agent/installer; go build -o utmstack_agent_installer.exe -v .
+          cd ${{ github.workspace }}/agent/redline; go build -o utmstack_redline_service.exe -v .
+          cd ${{ github.workspace }}/agent/updater; go build -o utmstack_updater_service.exe -v .
+          Write-Host "Deploying Agent to $env:DEPLOY_ENV"
+
