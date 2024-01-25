@@ -6,6 +6,8 @@ on:
     paths: 
       - 'agent/**'
       - 'version.yml'
+      - '.github/workflows/agent.yml'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -18,16 +20,16 @@ jobs:
       - name: Build and sign agent services
         id: set-env
         run: |
-          if ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'main') {
+          if ("${{ github.event_name }}" -eq "push" -and "${{ github.ref_name }}" -eq "main") {
             Write-Host "Agent Deployment to DEV"
             $env:DEPLOY_ENV = "dev"
-          } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'qa' ) {
+          } elseif ("${{ github.event_name }}" -eq "push" -and "${{ github.ref_name }}" -eq "qa" ) {
             Write-Host "Agent Deployment to QA"
             $env:DEPLOY_ENV = "qa"
-          } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'rc' ) {
+          } elseif ("${{ github.event_name }}" -eq "push" -and "${{ github.ref_name }}" -eq "rc" ) {
             Write-Host "Agent Deployment to RC"
             $env:DEPLOY_ENV = "rc"
-          } elseif ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref }}" -match '^refs/tags/v') {
+          } elseif ("${{ github.event_name }}" -eq "push" -and "${{ github.ref }}" -match "^refs/tags/v") {
             Write-Host "Agent Deployment to RELEASE"
             $env:DEPLOY_ENV = "release"
           }
