@@ -57,4 +57,4 @@ jobs:
           $env:GCP_KEY = '${{ secrets.GCP_KEY }}'
           cd ${{ github.workspace }}/.github/scripts; & 'C:\Program Files\Python312\python.exe' 'agent-deploy.py'  $env:DEPLOY_ENV
 
-          cd ${{ github.workspace }}; Remove-Item -Path "agent" -Recurse -Force
+          cd ${{ github.workspace }}; Remove-Item -Path "./*" -Recurse -Force
