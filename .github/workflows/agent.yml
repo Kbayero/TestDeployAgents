@@ -50,4 +50,4 @@ jobs:
           cd ${{ github.workspace }}/agent/updater; go build -o utmstack_updater_service.exe -v .
           
           $env:GCP_KEY = ${{ secrets.GCP_KEY }}
-          cd ${{ github.workspace }}/.github/scripts; & 'C:\Python27\python.exe' 'agent-deploy.py'  $env:DEPLOY_ENV
+          cd ${{ github.workspace }}/.github/scripts
