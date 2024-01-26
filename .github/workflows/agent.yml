@@ -6,8 +6,6 @@ on:
     paths: 
       - 'agent/**'
       - 'version.yml'
-      - '.github/workflows/agent.yml'
-      - '.github/scripts/**'
   workflow_dispatch:
 
 jobs:
