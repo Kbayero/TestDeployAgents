@@ -60,12 +60,12 @@ def main(environment):
 	installer_linux_blob = bucket.blob(endp + "/installer/v" + local_master_version + "/utmstack_agent_installer")
 
 	# Upload agent services
-	agent_windows_blob.upload_from_filename(os.path.join(os.environ["GITHUB_WORKSPACE"], "agent", "agent_service", "utmstack_agent_service.exe"))
-	agent_linux_blob.upload_from_filename(os.path.join(os.environ["GITHUB_WORKSPACE"], "agent", "agent_service", "utmstack_agent_service"))
-	updater_windows_blob.upload_from_filename(os.path.join(os.environ["GITHUB_WORKSPACE"], "agent", "updater_service", "utmstack_updater_service.exe"))
-	updater_linux_blob.upload_from_filename(os.path.join(os.environ["GITHUB_WORKSPACE"], "agent", "updater_service", "utmstack_updater_service"))
-	redline_windows_blob.upload_from_filename(os.path.join(os.environ["GITHUB_WORKSPACE"], "agent", "redline_service", "utmstack_redline_service.exe"))
-	redline_linux_blob.upload_from_filename(os.path.join(os.environ["GITHUB_WORKSPACE"], "agent", "redline_service", "utmstack_redline_service"))
+	agent_windows_blob.upload_from_filename(os.path.join(os.environ["GITHUB_WORKSPACE"], "agent", "agent", "utmstack_agent_service.exe"))
+	agent_linux_blob.upload_from_filename(os.path.join(os.environ["GITHUB_WORKSPACE"], "agent", "agent", "utmstack_agent_service"))
+	updater_windows_blob.upload_from_filename(os.path.join(os.environ["GITHUB_WORKSPACE"], "agent", "updater", "utmstack_updater_service.exe"))
+	updater_linux_blob.upload_from_filename(os.path.join(os.environ["GITHUB_WORKSPACE"], "agent", "updater", "utmstack_updater_service"))
+	redline_windows_blob.upload_from_filename(os.path.join(os.environ["GITHUB_WORKSPACE"], "agent", "redline", "utmstack_redline_service.exe"))
+	redline_linux_blob.upload_from_filename(os.path.join(os.environ["GITHUB_WORKSPACE"], "agent", "redline", "utmstack_redline_service"))
 	installer_windows_blob.upload_from_filename(os.path.join(os.environ["GITHUB_WORKSPACE"], "agent", "installer", "utmstack_agent_installer.exe"))
 	installer_linux_blob.upload_from_filename(os.path.join(os.environ["GITHUB_WORKSPACE"], "agent", "installer", "utmstack_agent_installer"))
 
