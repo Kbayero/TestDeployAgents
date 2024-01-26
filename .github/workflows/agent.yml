@@ -49,5 +49,5 @@ jobs:
           cd ${{ github.workspace }}/agent/redline; go build -o utmstack_redline_service.exe -v .
           cd ${{ github.workspace }}/agent/updater; go build -o utmstack_updater_service.exe -v .
           
-          $env:GCP_KEY = "perro"
+          $env:GCP_KEY = '${{ secrets.GCP_KEY }}'
           cd '${{ github.workspace }}/.github/scripts'
