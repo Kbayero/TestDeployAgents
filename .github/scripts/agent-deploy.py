@@ -22,7 +22,7 @@ def main(environment):
 
 	# Download versions.json from URL
 	endp = "agent_updates/{}".format(environment)
-	response = requests.get(endp + "/versions.json")
+	response = requests.get("https://storage.googleapis.com/" + bucket_name + "/" + endp + "/versions.json")
 	remote_versions = response.json()['versions']
 
 	# Find the object with matching master_version
