@@ -20,7 +20,6 @@ jobs:
       - name: Build and sign agent services
         id: set-env
         run: |
-          # Set environment variables
           if ("${{ github.event_name }}" -eq 'push' -and "${{ github.ref_name }}" -eq 'main') {
             Write-Host "Agent Deployment to DEV"
             $env:DEPLOY_ENV = "dev"
@@ -35,10 +34,8 @@ jobs:
             $env:DEPLOY_ENV = "release"
           }
 
-          # Replace encrypted key in const.go
           cd ${{ github.workspace }}/agent/agent/configuration; (Get-Content const.go) | Foreach-Object { $_ -replace 'const REPLACE_KEY string = ""', 'const REPLACE_KEY string = "${{ secrets.AGENT_SECRET_PREFIX }}"' } | Set-Content const.go
           
-          # Build agent services for linux
           $env:GOOS = "linux"
           $env:GOARCH = "amd64"
           cd ${{ github.workspace }}/agent/agent; go build -o utmstack_agent_service -v .
@@ -46,19 +43,15 @@ jobs:
           cd ${{ github.workspace }}/agent/redline; go build -o utmstack_redline_service -v .
           cd ${{ github.workspace }}/agent/updater; go build -o utmstack_updater_service -v .
           
-          # Build agent services for windows
           $env:GOOS = "windows"
           cd ${{ github.workspace }}/agent/agent; go build -o utmstack_agent_service.exe -v .
           cd ${{ github.workspace }}/agent/installer; go build -o utmstack_agent_installer.exe -v .
           cd ${{ github.workspace }}/agent/redline; go build -o utmstack_redline_service.exe -v .
           cd ${{ github.workspace }}/agent/updater; go build -o utmstack_updater_service.exe -v .
           
-          # Install python and dependencies
           Invoke-WebRequest -Uri "https://www.python.org/ftp/python/3.12.1/python-3.12.1-amd64.exe" -OutFile "python-installer.exe"
           Start-Process -FilePath "python-installer.exe" -ArgumentList "/quiet InstallAllUsers=1 PrependPath=1" -Wait
           Remove-Item -Path "python-installer.exe"
           python -m pip install --upgrade pip
           pip install requests google-cloud-storage pyyaml
 
-          # $env:GCP_KEY = '${{ secrets.GCP_KEY }}'
-          # cd ${{ github.workspace }}/.github/scripts; & 'C:\Program Files\Python312\python.exe' 'agent-deploy.py'  $env:DEPLOY_ENV
