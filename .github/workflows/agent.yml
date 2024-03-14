@@ -31,7 +31,7 @@ jobs:
 
           if ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/feature/') }}; then
             echo "Agent Deployment to DEV"
-          elif ${{ github.event_name == 'pull_request' && github.event.pull_request.state == 'approved' && github.base_ref == 'main' }}; then
+          elif ${{ github.event_name == 'pull_request_review' && github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'main' }}; then
             echo "Agent Deployment to RC"
           elif ${{ github.event_name  == 'push' && startsWith(github.ref, 'refs/tags/v') }}; then
             echo "Agent Deployment to RELEASE"
