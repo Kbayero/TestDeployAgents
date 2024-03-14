@@ -21,11 +21,10 @@ jobs:
       - name: Build and sign agent services
         id: set-env
         run: |
-          if ${{ github.event_name == 'push' && github.ref_name == 'feature/*' }}; then
+          if ${{ github.event_name == 'push' && github.ref == 'refs/heads/feature/*' }}; then
             echo "Agent Deployment to DEV"
-          elif ${{ github.event_name == 'pull_request' && github.event.pull_request.state == 'approved' && github.ref_name == 'main' }}; then
+          elif ${{ github.event_name == 'pull_request' && github.event.pull_request.state == 'approved' && github.ref == 'refs/heads/main' }}; then
             echo "Agent Deployment to RC"
-          elif ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}; then
+          elif ${{ github.event_name  == 'push' && github.ref == 'refs/tags/v*' }}; then
             echo "Agent Deployment to RELEASE"
           fi
-          
