@@ -23,7 +23,9 @@ jobs:
         run: |
           echo ${{ github.event_name }}
           echo ${{ github.ref }}
+          echo ${{ github.base_ref }}
           echo ${{ github.event.pull_request.state }}
+          
           if ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/feature/') }}; then
             echo "Agent Deployment to DEV"
           elif ${{ github.event_name == 'pull_request' && github.event.pull_request.state == 'approved' && github.base_ref == 'main' }}; then
