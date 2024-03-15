@@ -15,30 +15,36 @@ on:
       - 'version.yml'
 
 jobs:
-  build:
-    name: Build
+  check:
+    name: Check environment
     runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.set-env.outputs.environment }}
     steps:
-      - name: Build and sign agent services
+      - name: Check environment
         id: set-env
         run: |
-          echo ${{ github.event_name }}
-          echo ${{ github.ref }}
-          echo ${{ github.base_ref }}
-          echo ${{ github.event.review.state }}
-          echo ${{ github.event.pull_request_review.state }}
-          echo ${{ github.event.pull_request.base.ref }}
-
           if ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/feature/') }}; then
             echo "Agent Deployment to DEV"
+            echo "::set-output name=environment::dev"
           elif ${{ github.event_name == 'pull_request_review' && github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'main' }}; then
             echo "Agent Deployment to RC"
+            echo "::set-output name=environment::rc"
           elif ${{ github.event_name  == 'push' && startsWith(github.ref, 'refs/tags/v') }}; then
             echo "Agent Deployment to RELEASE"
+            echo "::set-output name=environment::release"
           else
             echo "No deployment"
-            exit 0       
+            echo "::set-output name=environment::none"     
           fi
+
+  test:
+    name: Test after
+    needs: check
+    if: ${{ needs.check.outputs.environment != 'none' }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Test after
         run: |
           echo "Test after"
+
