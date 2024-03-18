@@ -22,7 +22,7 @@ jobs:
           filters: |
             paths:
               - 'backend/**'
-              - 'version.yml''
+              - 'version.yml'
 
       - name: Determine Build Environment
         if: steps.changes.outputs.paths == 'true'
