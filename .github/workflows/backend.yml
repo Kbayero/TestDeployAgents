@@ -9,16 +9,23 @@ on:
       - 'version.yml'
   pull_request_review:
     types: [submitted]
-    paths: 
-      - 'backend/**'
-      - 'version.yml'
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            paths:
+              - 'backend/**'
+              - 'version.yml''
+
       - name: Determine Build Environment
+        if: steps.changes.outputs.paths == 'true'
         id: set-env
         run: |
           if ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/feature/') }}; then
