@@ -25,10 +25,13 @@ jobs:
           if ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/feature/') }}; then
             echo "DEV environment"
             echo "ENV_VERSION=v10-dev" >> $GITHUB_ENV
+            echo "is_dev=true" >> $GITHUB_OUTPUT
           elif ${{ github.event_name == 'pull_request_review' && github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'main' }}; then
             echo "RC environment"
             echo "ENV_VERSION=v10-rc" >> $GITHUB_ENV
+            echo "is_dev=false" >> $GITHUB_OUTPUT
           elif ${{ github.event_name  == 'push' && startsWith(github.ref, 'refs/tags/v') }}; then
             echo "PROD environment"
-            echo "ENV_VERSION=v10" >> $GITHUB_ENV  
+            echo "ENV_VERSION=v10" >> $GITHUB_ENV
+            echo "is_dev=false" >> $GITHUB_OUTPUT
           fi
