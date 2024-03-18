@@ -25,7 +25,7 @@ jobs:
   build:
     needs: check_branch
     if: needs.check_branch.outputs.is_feature == 'true'
-    runs-on: dev
+    runs-on: ubuntu-latest
     steps:
     - name: Test printer
       run: echo "Hello, world!"
