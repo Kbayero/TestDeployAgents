@@ -10,7 +10,7 @@ jobs:
   check_branch:
     runs-on: ubuntu-latest
     outputs:
-      is_feature: ${{ steps.check_branch.outputs.is_feature }}
+      is_feature: ${{ steps.check.outputs.is_feature }}
     steps:
       - id: check
         run: |
