@@ -1,0 +1,29 @@
+name: Installer Dev
+
+on:
+  workflow_run:
+    workflows: ["Backend Build", "Agent Manager Build"]
+    types:
+      - completed
+
+jobs:
+  check_branch:
+    runs-on: ubuntu-latest
+    outputs:
+      is_feature: ${{ steps.check_branch.outputs.is_feature }}
+    steps:
+      - id: check
+        run: |
+          echo ${{ github.event.workflow_run.head_branch }}
+          if ${{ startsWith(github.event.workflow_run.head_branch, 'feature/') }}; then
+            echo "::set-output name=is_feature::true"
+          else 
+            echo "::set-output name=is_feature::false"
+          fi
+  build:
+    needs: check_branch
+    if: needs.check_branch.outputs.is_feature == 'true'
+    runs-on: dev
+    steps:
+    - name: Test printer
+      run: echo "Hello, world!"

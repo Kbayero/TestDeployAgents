@@ -1,0 +1,34 @@
+name: Backend Build
+
+on:
+  push:
+    tags: [ 'v*' ]
+    branches: [ 'feature/*' ]
+    paths: 
+      - 'backend/**'
+      - 'version.yml'
+  pull_request_review:
+    types: [submitted]
+    branches: [ 'main' ]
+    paths: 
+      - 'backend/**'
+      - 'version.yml'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Determine Build Environment
+        id: set-env
+        run: |
+          if ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/feature/') }}; then
+            echo "DEV environment"
+            echo "ENV_VERSION=v10-dev" >> $GITHUB_ENV
+          elif ${{ github.event_name == 'pull_request_review' && github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'main' }}; then
+            echo "RC environment"
+            echo "ENV_VERSION=v10-rc" >> $GITHUB_ENV
+          elif ${{ github.event_name  == 'push' && startsWith(github.ref, 'refs/tags/v') }}; then
+            echo "PROD environment"
+            echo "ENV_VERSION=v10" >> $GITHUB_ENV  
+          fi
