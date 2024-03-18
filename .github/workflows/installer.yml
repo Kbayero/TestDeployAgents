@@ -16,9 +16,11 @@ jobs:
         run: |
           echo ${{ github.event.workflow_run.head_branch }}
           if ${{ startsWith(github.event.workflow_run.head_branch, 'feature/') }}; then
-            echo "::set-output name=is_feature::true"
-          else 
-            echo "::set-output name=is_feature::false"
+            echo "Es una feature"
+            echo "is_feature=true" >> $GITHUB_OUTPUT
+          else
+            echo "No es una feature"
+            echo "is_feature=false" >> $GITHUB_OUTPUT
           fi
   build:
     needs: check_branch
