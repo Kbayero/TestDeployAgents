@@ -71,7 +71,7 @@ jobs:
               - 'version.yml'
       - run: |
           echo "${{ steps.changes_backend.outputs.paths }}"
-          echo "backend_checking=${{ steps.changes_backend.outputs.paths }}" >> $GITHUB_OUTPUT
+          echo "backend_checking="${{ steps.changes_backend.outputs.paths }}"" >> $GITHUB_OUTPUT
 
       - uses: dorny/paths-filter@v2
         id: changes_correlation
