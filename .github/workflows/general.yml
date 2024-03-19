@@ -12,18 +12,18 @@ jobs:
     name: Checking
     runs-on: ubuntu-latest
     outputs:
-      env_version: ${{ steps.check.outputs.env_version }}
-      agent_manager_checking: ${{ steps.check.outputs.agent_manager_checking }}
-      agent_checking: ${{ steps.check.outputs.agent_checking }}
-      backend_checking: ${{ steps.check.outputs.backend_checking }}
-      correlation_checking: ${{ steps.check.outputs.correlation_checking }}
-      frontend_checking: ${{ steps.check.outputs.frontend_checking }}
-      bdgz_checking: ${{ steps.check.outputs.bdgz_checking }}
-      mutate_checking: ${{ steps.check.outputs.mutate_checking }}
-      o365_checking: ${{ steps.check.outputs.o365_checking }}
-      log_auth_proxy_checking: ${{ steps.check.outputs.log_auth_proxy_checking }}
-      user_auditor_checking: ${{ steps.check.outputs.user_auditor_checking }}
-      web_pdf_checking: ${{ steps.check.outputs.web_pdf_checking }}
+      env_version: ${{ steps.set-env.outputs.env_version }}
+      agent_manager_checking: ${{ steps.changes_agent_manager.outputs.agent_manager_checking }}
+      agent_checking: ${{ steps.changes_agent.outputs.agent_checking }}
+      backend_checking: ${{ steps.changes_backend.outputs.backend_checking }}
+      correlation_checking: ${{ steps.changes_correlation.outputs.correlation_checking }}
+      frontend_checking: ${{ steps.changes_frontend.outputs.frontend_checking }}
+      bdgz_checking: ${{ steps.changes_bdgz.outputs.bdgz_checking }}
+      mutate_checking: ${{ steps.changes_mutate.outputs.mutate_checking }}
+      o365_checking: ${{ steps.changes_o365.outputs.o365_checking }}
+      log_auth_proxy_checking: ${{ steps.changes_log_auth_proxy.outputs.log_auth_proxy_checking }}
+      user_auditor_checking: ${{ steps.changes_user_auditor.outputs.user_auditor_checking }}
+      web_pdf_checking: ${{ steps.changes_web_pdf.outputs.web_pdf_checking }}
     steps:
       - name: Determine Build Environment
         id: set-env
@@ -48,6 +48,7 @@ jobs:
             paths:
               - 'agent-manager/**'
       - run: |
+          echo "${{ steps.changes_agent_manager.outputs.paths }}"
           echo "agent_manager_checking=${{ steps.changes_agent_manager.outputs.paths }}" >> $GITHUB_OUTPUT
       
       - uses: dorny/paths-filter@v2
@@ -58,6 +59,7 @@ jobs:
               - 'agent/**'
               - 'version.yml'
       - run: |
+          echo "${{ steps.changes_agent.outputs.paths }}"
           echo "agent_checking=${{ steps.changes_agent.outputs.paths }}" >> $GITHUB_OUTPUT
 
       - uses: dorny/paths-filter@v2
@@ -68,7 +70,8 @@ jobs:
               - 'backend/**'
               - 'version.yml'
       - run: |
-          echo "backend_checking=${{ steps.changes_backend.outputs.paths }}" >> $GITHUB_OUTPUT
+          echo "${{ steps.changes_backend.outputs.paths }}"
+          echo "backend_checking="${{ steps.changes_backend.outputs.paths }}"" >> $GITHUB_OUTPUT
 
       - uses: dorny/paths-filter@v2
         id: changes_correlation
@@ -77,6 +80,7 @@ jobs:
             paths:
               - 'correlation/**'
       - run: |
+          echo "${{ steps.changes_correlation.outputs.paths }}"
           echo "correlation_checking=steps.changes_correlation.outputs.paths" >> $GITHUB_OUTPUT
 
       - uses: dorny/paths-filter@v2
