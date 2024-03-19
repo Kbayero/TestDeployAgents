@@ -13,17 +13,17 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       env_version: ${{ steps.set-env.outputs.env_version }}
-      agent_manager_checking: ${{ steps.changes_agent_manager.outputs.agent_manager_checking }}
-      agent_checking: ${{ steps.changes_agent.outputs.agent_checking }}
-      backend_checking: ${{ steps.changes_backend.outputs.backend_checking }}
-      correlation_checking: ${{ steps.changes_correlation.outputs.correlation_checking }}
-      frontend_checking: ${{ steps.changes_frontend.outputs.frontend_checking }}
-      bdgz_checking: ${{ steps.changes_bdgz.outputs.bdgz_checking }}
-      mutate_checking: ${{ steps.changes_mutate.outputs.mutate_checking }}
-      o365_checking: ${{ steps.changes_o365.outputs.o365_checking }}
-      log_auth_proxy_checking: ${{ steps.changes_log_auth_proxy.outputs.log_auth_proxy_checking }}
-      user_auditor_checking: ${{ steps.changes_user_auditor.outputs.user_auditor_checking }}
-      web_pdf_checking: ${{ steps.changes_web_pdf.outputs.web_pdf_checking }}
+      agent_manager_checking: ${{ steps.changes_agent_manager_output.outputs.agent_manager_checking }}
+      agent_checking: ${{ steps.changes_agent_output.outputs.agent_checking }}
+      backend_checking: ${{ steps.changes_backend_output.outputs.backend_checking }}
+      correlation_checking: ${{ steps.changes_correlation_output.outputs.correlation_checking }}
+      frontend_checking: ${{ steps.changes_frontend_output.outputs.frontend_checking }}
+      bdgz_checking: ${{ steps.changes_bdgz_output.outputs.bdgz_checking }}
+      mutate_checking: ${{ steps.changes_mutate_output.outputs.mutate_checking }}
+      o365_checking: ${{ steps.changes_o365_output.outputs.o365_checking }}
+      log_auth_proxy_checking: ${{ steps.changes_log_auth_proxy_output.outputs.log_auth_proxy_checking }}
+      user_auditor_checking: ${{ steps.changes_user_auditor_output.outputs.user_auditor_checking }}
+      web_pdf_checking: ${{ steps.changes_web_pdf_output.outputs.web_pdf_checking }}
     steps:
       - name: Determine Build Environment
         id: set-env
@@ -47,7 +47,8 @@ jobs:
           filters: |
             paths:
               - 'agent-manager/**'
-      - run: |
+      - id: changes_agent_manager_output
+        run: |
           echo "${{ steps.changes_agent_manager.outputs.paths }}"
           echo "agent_manager_checking=${{ steps.changes_agent_manager.outputs.paths }}" >> $GITHUB_OUTPUT
       
@@ -58,7 +59,8 @@ jobs:
             paths:
               - 'agent/**'
               - 'version.yml'
-      - run: |
+      - id: changes_agent_output
+        run: |
           echo "${{ steps.changes_agent.outputs.paths }}"
           echo "agent_checking=${{ steps.changes_agent.outputs.paths }}" >> $GITHUB_OUTPUT
 
@@ -69,7 +71,8 @@ jobs:
             paths:
               - 'backend/**'
               - 'version.yml'
-      - run: |
+      - id: changes_backend_output
+        run: |
           echo "${{ steps.changes_backend.outputs.paths }}"
           echo "backend_checking=${{ steps.changes_backend.outputs.paths }}" >> $GITHUB_OUTPUT
 
@@ -79,7 +82,8 @@ jobs:
           filters: |
             paths:
               - 'correlation/**'
-      - run: |
+      - id: changes_correlation_output
+        run: |
           echo "${{ steps.changes_correlation.outputs.paths }}"
           echo "correlation_checking=steps.changes_correlation.outputs.paths" >> $GITHUB_OUTPUT
 
