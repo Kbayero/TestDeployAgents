@@ -2,7 +2,7 @@ name: Installer Dev
 
 on:
   workflow_run:
-    workflows: ["Frontend Build", "Backend Build", "User Auditor Build", "Web PDF Build", "Log Auth Proxy Build", "Agent Manager Build", "Correlation Build", "Bitdefender Build", "Mutate Build", "O365 Build"]
+    workflows: ["General Workflow"]
     types:
       - completed
 
