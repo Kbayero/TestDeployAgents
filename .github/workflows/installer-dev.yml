@@ -1,0 +1,33 @@
+name: Installer Dev
+
+on:
+  workflow_run:
+    workflows: ["General Workflow"]
+    types:
+      - completed
+
+jobs:
+  check_feature:
+    name: Check if feature
+    runs-on: ubuntu-latest
+    outputs:
+      is_feature: ${{ steps.check.outputs.is_feature }}
+    steps:
+      - id: check
+        run: |
+          echo ${{ github.event.workflow_run.event }}
+          if ${{ startsWith(github.event.workflow_run.head_branch, 'feature/') && github.event.workflow_run.event != 'pull_request_review'}}; then
+            echo "Es una feature"
+            echo "is_feature=true" >> $GITHUB_OUTPUT
+          else
+            echo "No es una feature"
+            echo "is_feature=false" >> $GITHUB_OUTPUT
+          fi
+  deploy:
+    name: Deploy to dev
+    needs: check_feature
+    if: needs.check_feature.outputs.is_feature == 'true'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Test printer
+      run: echo "Hello, world!"

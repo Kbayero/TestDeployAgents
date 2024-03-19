@@ -2,7 +2,6 @@ name: General Workflow
 
 on:
   push:
-    tags: [ 'v*' ]
     branches: [ 'feature/*' ]
   pull_request_review:
     types: [submitted]
@@ -31,15 +30,9 @@ jobs:
           if ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/feature/') }}; then
             echo "DEV environment"
             echo "env_version=v10-dev" >> $GITHUB_OUTPUT
-            echo "ENV_VERSION=v10-dev" >> $GITHUB_ENV
           elif ${{ github.event_name == 'pull_request_review' && github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'main' }}; then
             echo "RC environment"
             echo "env_version=v10-rc" >> $GITHUB_OUTPUT
-            echo "ENV_VERSION=v10-rc" >> $GITHUB_ENV
-          elif ${{ github.event_name  == 'push' && startsWith(github.ref, 'refs/tags/v') }}; then
-            echo "PROD environment"
-            echo "env_version=v10" >> $GITHUB_OUTPUT
-            echo "ENV_VERSION=v10" >> $GITHUB_ENV 
           fi
 
       - uses: actions/checkout@v2
@@ -155,25 +148,6 @@ jobs:
       - id: changes_web_pdf_output
         run: |
           echo "web_pdf_checking=steps.changes_web_pdf.outputs.paths" >> $GITHUB_OUTPUT
-
-      - name: Find Changes between tags
-        id: read_notes
-        run: |
-          if [[ "${{ env.ENV_VERSION }}" == "v10" ]]; then
-            IFS=$'\n' read -d '' -r -a paths < release.txt
-
-            if [[ " ${paths[@]} " =~ " agent-manager " ]]; then
-              echo "agent_manager_checking=true" >> $GITHUB_OUTPUT
-            else
-              echo "agent_manager_checking=false" >> $GITHUB_OUTPUT
-            fi
-
-            if [[ " ${paths[@]} " =~ " backend " ]]; then
-              echo "backend_checking=true" >> $GITHUB_OUTPUT
-            else
-              echo "backend_checking=false" >> $GITHUB_OUTPUT
-            fi
-          fi
   
   agent_manager_build:
     name: Build Agent Manager
