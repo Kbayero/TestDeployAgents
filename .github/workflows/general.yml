@@ -49,7 +49,6 @@ jobs:
               - 'agent-manager/**'
       - id: changes_agent_manager_output
         run: |
-          echo "${{ steps.changes_agent_manager.outputs.paths }}"
           echo "agent_manager_checking=${{ steps.changes_agent_manager.outputs.paths }}" >> $GITHUB_OUTPUT
       
       - uses: dorny/paths-filter@v2
@@ -61,7 +60,6 @@ jobs:
               - 'version.yml'
       - id: changes_agent_output
         run: |
-          echo "${{ steps.changes_agent.outputs.paths }}"
           echo "agent_checking=${{ steps.changes_agent.outputs.paths }}" >> $GITHUB_OUTPUT
 
       - uses: dorny/paths-filter@v2
@@ -73,7 +71,6 @@ jobs:
               - 'version.yml'
       - id: changes_backend_output
         run: |
-          echo "${{ steps.changes_backend.outputs.paths }}"
           echo "backend_checking=${{ steps.changes_backend.outputs.paths }}" >> $GITHUB_OUTPUT
 
       - uses: dorny/paths-filter@v2
@@ -84,7 +81,6 @@ jobs:
               - 'correlation/**'
       - id: changes_correlation_output
         run: |
-          echo "${{ steps.changes_correlation.outputs.paths }}"
           echo "correlation_checking=steps.changes_correlation.outputs.paths" >> $GITHUB_OUTPUT
 
       - uses: dorny/paths-filter@v2
@@ -93,7 +89,8 @@ jobs:
           filters: |
             paths:
               - 'frontend/**'
-      - run: |
+      - id: changes_frontend_output
+        run: |
           echo "frontend_checking=steps.changes_frontend.outputs.paths" >> $GITHUB_OUTPUT
 
       - uses: dorny/paths-filter@v2
@@ -102,7 +99,8 @@ jobs:
           filters: |
             paths:
               - 'bdgz/**'
-      - run: |
+      - id: changes_bdgz_output
+        run: |
           echo "bdgz_checking=steps.changes_bdgz.outputs.paths" >> $GITHUB_OUTPUT
 
       - uses: dorny/paths-filter@v2
@@ -111,7 +109,8 @@ jobs:
           filters: |
             paths:
               - 'mutate/**'
-      - run: |
+      - id: changes_mutate_output
+        run: |
           echo "mutate_checking=steps.changes_mutate.outputs.paths" >> $GITHUB_OUTPUT
 
       - uses: dorny/paths-filter@v2
@@ -120,7 +119,8 @@ jobs:
           filters: |
             paths:
               - 'office365/**'
-      - run: |
+      - id: changes_o365_output
+        run: |
           echo "o365_checking=steps.changes_o365.outputs.paths" >> $GITHUB_OUTPUT
 
       - uses: dorny/paths-filter@v2
@@ -129,7 +129,8 @@ jobs:
           filters: |
             paths:
               - 'log-auth-proxy/**'
-      - run: |
+      - id: changes_log_auth_proxy_output
+        run: |
           echo "log_auth_proxy_checking=steps.changes_log_auth_proxy.outputs.paths" >> $GITHUB_OUTPUT
 
       - uses: dorny/paths-filter@v2
@@ -138,7 +139,8 @@ jobs:
           filters: |
             paths:
               - 'user-auditor/**'
-      - run: |
+      - id: changes_user_auditor_output
+        run: |
           echo "user_auditor_checking=steps.changes_user_auditor.outputs.paths" >> $GITHUB_OUTPUT
 
       - uses: dorny/paths-filter@v2
@@ -147,10 +149,12 @@ jobs:
           filters: |
             paths:
               - 'web-pdf/**'
-      - run: |
+      - id: changes_web_pdf_output
+        run: |
           echo "web_pdf_checking=steps.changes_web_pdf.outputs.paths" >> $GITHUB_OUTPUT
   
   agent_manager_build:
+    name: Build Agent Manager
     needs: check
     if: needs.check.outputs.agent_manager_checking == 'true'
     uses: ./.github/workflows/agent-manager.yml
@@ -158,6 +162,7 @@ jobs:
       env_version: ${{ needs.check.outputs.env_version }}
 
   agent_build:
+    name: Build Agent
     needs: check
     if: needs.check.outputs.agent_checking == 'true'
     uses: ./.github/workflows/agent.yml
@@ -165,6 +170,7 @@ jobs:
       env_version: ${{ needs.check.outputs.env_version }}
 
   backend_build:
+    name: Build Backend
     needs: check
     if: needs.check.outputs.backend_checking == 'true'
     uses: ./.github/workflows/backend.yml
@@ -172,6 +178,7 @@ jobs:
       env_version: ${{ needs.check.outputs.env_version }}
   
   correlation_build:
+    name: Build Correlation
     needs: check
     if: needs.check.outputs.correlation_checking == 'true'
     uses: ./.github/workflows/correlation.yml
@@ -179,6 +186,7 @@ jobs:
       env_version: ${{ needs.check.outputs.env_version }}
 
   frontend_build:
+    name: Build Frontend
     needs: check
     if: needs.check.outputs.frontend_checking == 'true'
     uses: ./.github/workflows/frontend.yml
@@ -186,6 +194,7 @@ jobs:
       env_version: ${{ needs.check.outputs.env_version }}
 
   bdgz_build:
+    name: Build Bitdefender
     needs: check
     if: needs.check.outputs.bdgz_checking == 'true'
     uses: ./.github/workflows/bdgz.yml
@@ -193,6 +202,7 @@ jobs:
       env_version: ${{ needs.check.outputs.env_version }}
 
   mutate_build:
+    name: Build Mutate
     needs: check
     if: needs.check.outputs.mutate_checking == 'true'
     uses: ./.github/workflows/mutate.yml
@@ -200,6 +210,7 @@ jobs:
       env_version: ${{ needs.check.outputs.env_version }}
 
   o365_build:
+    name: Build Office365
     needs: check
     if: needs.check.outputs.o365_checking == 'true'
     uses: ./.github/workflows/o365.yml
@@ -207,6 +218,7 @@ jobs:
       env_version: ${{ needs.check.outputs.env_version }}
   
   log_auth_proxy_build:
+    name: Build Log Auth Proxy
     needs: check
     if: needs.check.outputs.log_auth_proxy_checking == 'true'
     uses: ./.github/workflows/log-auth-proxy.yml
@@ -214,6 +226,7 @@ jobs:
       env_version: ${{ needs.check.outputs.env_version }}
   
   user_auditor_build:
+    name: Build User Auditor
     needs: check
     if: needs.check.outputs.user_auditor_checking == 'true'
     uses: ./.github/workflows/user-auditor.yml
@@ -221,6 +234,7 @@ jobs:
       env_version: ${{ needs.check.outputs.env_version }}
     
   web_pdf_build:
+    name: Build Web PDF
     needs: check
     if: needs.check.outputs.web_pdf_checking == 'true'
     uses: ./.github/workflows/web-pdf.yml
