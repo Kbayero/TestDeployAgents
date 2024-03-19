@@ -157,20 +157,18 @@ jobs:
           echo "web_pdf_checking=steps.changes_web_pdf.outputs.paths" >> $GITHUB_OUTPUT
 
       - name: Find Changes between tags
+        id: read_notes
         run: |
           if [[ "${{ env.ENV_VERSION }}" == "v10" ]]; then
-            git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-            tags=$(git for-each-ref --sort=-creatordate --format '%(refname:short)' refs/tags | head -n 2)
-            IFS=$'\n' read -rd '' -a tag_array <<< "$tags"
-            changed_files=$(git diff --name-only "${tag_array[1]}" "${tag_array[0]}")
-            echo "Changed files:"
-            echo "$changed_files"
-            if echo "$changed_files" | grep -q 'agent-manager/'; then
+            IFS=$'\n' read -d '' -r -a paths < release.txt
+
+            if [[ " ${paths[@]} " =~ " agent-manager " ]]; then
               echo "agent_manager_checking=true" >> $GITHUB_OUTPUT
             else
               echo "agent_manager_checking=false" >> $GITHUB_OUTPUT
             fi
-            if echo "$changed_files" | grep -qE 'backend/|version.yml'; then
+
+            if [[ " ${paths[@]} " =~ " backend " ]]; then
               echo "backend_checking=true" >> $GITHUB_OUTPUT
             else
               echo "backend_checking=false" >> $GITHUB_OUTPUT

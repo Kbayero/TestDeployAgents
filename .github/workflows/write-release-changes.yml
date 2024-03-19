@@ -1,0 +1,42 @@
+name: Write Release Changes
+
+on:
+  push:
+    branches: [ 'main' ]
+
+jobs:
+  detect_changes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Download existing release notes
+        uses: actions/download-artifact@v2
+        with:
+          name: release_notes
+          path: .
+        continue-on-error: true  # continue if the artifact does not exist yet
+
+      - name: Detect changes and update file
+        run: |
+          if [[ -f release.txt ]]; then
+            echo "Existing release notes:"
+            cat release.txt
+          else
+            touch release.txt
+          fi
+
+          if git diff --name-only HEAD^ HEAD | grep -q 'agent-manager/' && ! grep -q 'agent-manager' release.txt; then
+            echo 'agent-manager' >> release.txt
+          fi
+
+          if git diff --name-only HEAD^ HEAD | grep -qE 'backend/|version.yml' && ! grep -q 'backend' release.txt; then
+            echo 'backend' >> release.txt
+          fi
+
+      - name: Upload release notes
+        uses: actions/upload-artifact@v2
+        with:
+          name: release_notes
+          path: release.txt
