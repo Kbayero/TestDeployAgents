@@ -1,4 +1,4 @@
-name: Agent Manager Build
+name: User Auditor Build
 
 on:
   workflow_call:

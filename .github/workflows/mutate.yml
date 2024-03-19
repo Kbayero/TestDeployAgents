@@ -1,4 +1,4 @@
-name: Agent Manager Build
+name: Mutate Build
 
 on:
   workflow_call:
