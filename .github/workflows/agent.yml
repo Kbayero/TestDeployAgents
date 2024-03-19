@@ -14,4 +14,4 @@ jobs:
     steps:
       - name: Test printer
         run: |
-          echo "Hello, world!"
+          echo "Deploy to ${{inputs.env_version}}"

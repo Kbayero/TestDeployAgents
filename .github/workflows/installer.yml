@@ -7,7 +7,8 @@ on:
       - completed
 
 jobs:
-  check_branch:
+  check_feature:
+    name: Check if feature
     runs-on: ubuntu-latest
     outputs:
       is_feature: ${{ steps.check.outputs.is_feature }}
@@ -22,9 +23,10 @@ jobs:
             echo "No es una feature"
             echo "is_feature=false" >> $GITHUB_OUTPUT
           fi
-  build:
-    needs: check_branch
-    if: needs.check_branch.outputs.is_feature == 'true'
+  deploy:
+    name: Deploy to dev
+    needs: check_feature
+    if: needs.check_feature.outputs.is_feature == 'true'
     runs-on: ubuntu-latest
     steps:
     - name: Test printer
