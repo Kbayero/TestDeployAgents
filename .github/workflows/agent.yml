@@ -1,40 +1,17 @@
 name: Agent Build
 
 on:
-  push:
-    tags: [ 'v*' ]
-    branches: [ 'feature/*' ]
-    paths: 
-      - 'agent/**'
-      - 'version.yml'
-  pull_request_review:
-    types: [submitted]
+  workflow_call:
+    inputs:
+      env_version:
+        required: true
+        type: string
 
 jobs:
-  check:
-    name: Check environment
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: dorny/paths-filter@v2
-        id: changes
-        with:
-          filters: |
-            paths:
-              - 'version.yml'
-              - 'agent/**'
-
-      - name: Check environment
-        if: steps.changes.outputs.paths == 'true'
-        id: set-env
+      - name: Test printer
         run: |
-          if ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/feature/') }}; then
-            echo "Agent Deployment to DEV"
-            echo "{environment}={dev}" >> $GITHUB_OUTPUT
-          elif ${{ github.event_name == 'pull_request_review' && github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'main' }}; then
-            echo "Agent Deployment to RC"
-            echo "{environment}={rc}" >> $GITHUB_OUTPUT
-          elif ${{ github.event_name  == 'push' && startsWith(github.ref, 'refs/tags/v') }}; then
-            echo "Agent Deployment to RELEASE"
-            echo "{environment}={release}" >> $GITHUB_OUTPUT   
-          fi
+          echo "Hello, world!"

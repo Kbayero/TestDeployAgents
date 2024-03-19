@@ -1,4 +1,4 @@
-name: Agent Manager Build
+name: Frontend Build
 
 on:
   workflow_call:

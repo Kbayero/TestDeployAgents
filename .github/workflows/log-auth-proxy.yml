@@ -1,4 +1,4 @@
-name: Agent Manager Build
+name: log Auth Proxy Build
 
 on:
   workflow_call:

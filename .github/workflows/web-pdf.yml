@@ -1,4 +1,4 @@
-name: Agent Manager Build
+name: Web PDF Build
 
 on:
   workflow_call:

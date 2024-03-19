@@ -1,40 +1,17 @@
 name: Backend Build
 
 on:
-  push:
-    tags: [ 'v*' ]
-    branches: [ 'feature/*' ]
-    paths: 
-      - 'backend/**'
-      - 'version.yml'
-  pull_request_review:
-    types: [submitted]
+  workflow_call:
+    inputs:
+      env_version:
+        required: true
+        type: string
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: dorny/paths-filter@v2
-        id: changes
-        with:
-          filters: |
-            paths:
-              - 'backend/**'
-              - 'version.yml'
-
-      - name: Determine Build Environment
-        if: steps.changes.outputs.paths == 'true'
-        id: set-env
+      - name: Test printer
         run: |
-          if ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/feature/') }}; then
-            echo "DEV environment"
-            echo "ENV_VERSION=v10-dev" >> $GITHUB_ENV
-          elif ${{ github.event_name == 'pull_request_review' && github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'main' }}; then
-            echo "RC environment"
-            echo "ENV_VERSION=v10-rc" >> $GITHUB_ENV
-          elif ${{ github.event_name  == 'push' && startsWith(github.ref, 'refs/tags/v') }}; then
-            echo "PROD environment"
-            echo "ENV_VERSION=v10" >> $GITHUB_ENV
-          fi
+          echo "Hello, world!"
