@@ -48,6 +48,7 @@ jobs:
             paths:
               - 'agent-manager/**'
       - run: |
+          echo "${{ steps.changes_agent_manager.outputs.paths }}""
           echo "agent_manager_checking=${{ steps.changes_agent_manager.outputs.paths }}" >> $GITHUB_OUTPUT
       
       - uses: dorny/paths-filter@v2
