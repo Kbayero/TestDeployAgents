@@ -2,7 +2,7 @@ name: Installer Dev
 
 on:
   workflow_run:
-    workflows: ["Backend Build", "Agent Manager Build"]
+    workflows: ["Frontend Build", "Backend Build", "User Auditor Build", "Web PDF Build", "Log Auth Proxy Build", "Agent Manager Build", "Correlation Build", "Bitdefender Build", "Mutate Build", "O365 Build"]
     types:
       - completed
 
@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       is_feature: ${{ steps.check.outputs.is_feature }}
-      backe
     steps:
       - id: check
         run: |
