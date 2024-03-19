@@ -48,7 +48,7 @@ jobs:
             paths:
               - 'agent-manager/**'
       - run: |
-          echo "${{ steps.changes_agent_manager.outputs.paths }}""
+          echo "${{ steps.changes_agent_manager.outputs.paths }}"
           echo "agent_manager_checking=${{ steps.changes_agent_manager.outputs.paths }}" >> $GITHUB_OUTPUT
       
       - uses: dorny/paths-filter@v2
@@ -59,6 +59,7 @@ jobs:
               - 'agent/**'
               - 'version.yml'
       - run: |
+          echo "${{ steps.changes_agent.outputs.paths }}"
           echo "agent_checking=${{ steps.changes_agent.outputs.paths }}" >> $GITHUB_OUTPUT
 
       - uses: dorny/paths-filter@v2
@@ -69,6 +70,7 @@ jobs:
               - 'backend/**'
               - 'version.yml'
       - run: |
+          echo "${{ steps.changes_backend.outputs.paths }}"
           echo "backend_checking=${{ steps.changes_backend.outputs.paths }}" >> $GITHUB_OUTPUT
 
       - uses: dorny/paths-filter@v2
@@ -78,6 +80,7 @@ jobs:
             paths:
               - 'correlation/**'
       - run: |
+          echo "${{ steps.changes_correlation.outputs.paths }}"
           echo "correlation_checking=steps.changes_correlation.outputs.paths" >> $GITHUB_OUTPUT
 
       - uses: dorny/paths-filter@v2
