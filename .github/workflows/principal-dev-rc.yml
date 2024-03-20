@@ -1,4 +1,4 @@
-name: General Workflow
+name: Dev/Rc Deploy
 
 on:
   push:
@@ -153,86 +153,111 @@ jobs:
     name: Build Agent Manager
     needs: check
     if: needs.check.outputs.agent_manager_checking == 'true'
-    uses: ./.github/workflows/agent-manager.yml
+    uses: ./.github/workflows/used-docker-golang.yml
     with:
-      env_version: ${{ needs.check.outputs.env_version }}
+      image_name: agent-manager
+      environment: ${{ needs.check.outputs.env_version }}
+      directory: agent-manager
+      binary: server
 
   agent_build:
     name: Build Agent
     needs: check
     if: needs.check.outputs.agent_checking == 'true'
-    uses: ./.github/workflows/agent.yml
+    uses: ./.github/workflows/used-agent.yml
     with:
-      env_version: ${{ needs.check.outputs.env_version }}
+      environment: ${{ needs.check.outputs.env_version }}
 
   backend_build:
     name: Build Backend
     needs: check
     if: needs.check.outputs.backend_checking == 'true'
-    uses: ./.github/workflows/backend.yml
+    uses: ./.github/workflows/used-docker-java-11.yml
     with:
-      env_version: ${{ needs.check.outputs.env_version }}
+      image_name: backend
+      environment: ${{ needs.check.outputs.env_version }}
+      directory: backend
   
   correlation_build:
     name: Build Correlation
     needs: check
     if: needs.check.outputs.correlation_checking == 'true'
-    uses: ./.github/workflows/correlation.yml
+    uses: ./.github/workflows/used-docker-golang.yml
     with:
-      env_version: ${{ needs.check.outputs.env_version }}
+      image_name: correlation
+      environment: ${{ needs.check.outputs.env_version }}
+      directory: correlation
+      binary: correlation
 
   frontend_build:
     name: Build Frontend
     needs: check
     if: needs.check.outputs.frontend_checking == 'true'
-    uses: ./.github/workflows/frontend.yml
+    uses: ./.github/workflows/used-docker-frontend.yml
     with:
-      env_version: ${{ needs.check.outputs.env_version }}
+      image_name: frontend
+      environment: ${{ needs.check.outputs.env_version }}
+      directory: frontend
 
   bdgz_build:
     name: Build Bitdefender
     needs: check
     if: needs.check.outputs.bdgz_checking == 'true'
-    uses: ./.github/workflows/bdgz.yml
+    uses: ./.github/workflows/used-docker-golang.yml
     with:
-      env_version: ${{ needs.check.outputs.env_version }}
+      image_name: bitdefender
+      environment: ${{ needs.check.outputs.env_version }}
+      directory: bdgz
+      binary: bdgz_integration
 
   mutate_build:
     name: Build Mutate
     needs: check
     if: needs.check.outputs.mutate_checking == 'true'
-    uses: ./.github/workflows/mutate.yml
+    uses: ./.github/workflows/used-docker-basic.yml
     with:
-      env_version: ${{ needs.check.outputs.env_version }}
+      image_name: mutate
+      environment: ${{ needs.check.outputs.env_version }}
+      directory: mutate
 
   o365_build:
     name: Build Office365
     needs: check
     if: needs.check.outputs.o365_checking == 'true'
-    uses: ./.github/workflows/o365.yml
+    uses: ./.github/workflows/used-docker-golang.yml
     with:
-      env_version: ${{ needs.check.outputs.env_version }}
+      image_name: office365
+      environment: ${{ needs.check.outputs.env_version }}
+      directory: office365
+      binary: o365_integration
   
   log_auth_proxy_build:
     name: Build Log Auth Proxy
     needs: check
     if: needs.check.outputs.log_auth_proxy_checking == 'true'
-    uses: ./.github/workflows/log-auth-proxy.yml
+    uses: ./.github/workflows/used-docker-golang.yml
     with:
-      env_version: ${{ needs.check.outputs.env_version }}
+      image_name: log-auth-proxy
+      environment: ${{ needs.check.outputs.env_version }}
+      directory: log-auth-proxy
+      binary: server
   
   user_auditor_build:
     name: Build User Auditor
     needs: check
     if: needs.check.outputs.user_auditor_checking == 'true'
-    uses: ./.github/workflows/user-auditor.yml
+    uses: ./.github/workflows/used-docker-java.yml
     with:
-      env_version: ${{ needs.check.outputs.env_version }}
+      image_name: user-auditor
+      environment: ${{ needs.check.outputs.env_version }}
+      directory: user-auditor
     
   web_pdf_build:
     name: Build Web PDF
     needs: check
     if: needs.check.outputs.web_pdf_checking == 'true'
-    uses: ./.github/workflows/web-pdf.yml
+    uses: ./.github/workflows/used-docker-java.yml
     with:
-      env_version: ${{ needs.check.outputs.env_version }}
+      image_name: web-pdf
+      environment: ${{ needs.check.outputs.env_version }}
+      directory: web-pdf

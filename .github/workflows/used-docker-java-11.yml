@@ -1,0 +1,21 @@
+name: Docker Image Java 11
+
+on:
+  workflow_call:
+    inputs:
+      image_name:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+      directory:
+        required: true
+        type: string
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the right branch
+        uses: actions/checkout@v4
