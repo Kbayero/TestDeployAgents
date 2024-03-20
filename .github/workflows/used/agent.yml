@@ -1,9 +1,9 @@
-name: log Auth Proxy Build
+name: Agent Build
 
 on:
   workflow_call:
     inputs:
-      env_version:
+      environment:
         required: true
         type: string
 
@@ -12,6 +12,5 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Test printer
-        run: |
-          echo "Deploy to ${{inputs.env_version}}"
+      - name: Checkout code
+        uses: actions/checkout@v2

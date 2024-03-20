@@ -2,7 +2,7 @@ name: Installer Dev
 
 on:
   workflow_run:
-    workflows: ["General Workflow"]
+    workflows: ["Dev/Rc Deploy"]
     types:
       - completed
 
@@ -17,17 +17,17 @@ jobs:
         run: |
           echo ${{ github.event.workflow_run.event }}
           if ${{ startsWith(github.event.workflow_run.head_branch, 'feature/') && github.event.workflow_run.event != 'pull_request_review'}}; then
-            echo "Es una feature"
+            echo "It's a feature"
             echo "is_feature=true" >> $GITHUB_OUTPUT
           else
-            echo "No es una feature"
+            echo "It's not a feature"
             echo "is_feature=false" >> $GITHUB_OUTPUT
           fi
   deploy:
     name: Deploy to dev
     needs: check_feature
     if: needs.check_feature.outputs.is_feature == 'true'
-    runs-on: ubuntu-latest
+    runs-on: dev
     steps:
-    - name: Test printer
-      run: echo "Hello, world!"
+    - name: Check out code into the right branch
+      uses: actions/checkout@v4

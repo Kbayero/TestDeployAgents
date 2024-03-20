@@ -1,0 +1,25 @@
+name: Docker Image Golang
+
+on:
+  workflow_call:
+    inputs:
+      image_name:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+      directory:
+        required: true
+        type: string
+      binary:
+        required: true
+        type: string
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the right branch
+        uses: actions/checkout@v4

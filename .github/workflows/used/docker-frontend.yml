@@ -1,0 +1,21 @@
+name: Create and Publish Frontend Docker Image
+
+on:
+  workflow_call:
+    inputs:
+      image_name:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+      directory:
+        required: true
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
