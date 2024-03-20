@@ -166,7 +166,7 @@ jobs:
     if: needs.check.outputs.agent_checking == 'true'
     uses: ./.github/workflows/agent.yml
     with:
-      environment: ${{ replace(needs.check.outputs.env_version, 'v10-', '') }}
+      environment: ${{ needs.check.outputs.env_version }}
 
   backend_build:
     name: Build Backend
