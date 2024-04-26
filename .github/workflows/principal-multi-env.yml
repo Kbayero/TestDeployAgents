@@ -22,7 +22,7 @@ jobs:
           if ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/feature/') }}; then
             echo "DEV environment"
             echo "env_version=v10-dev" >> $GITHUB_OUTPUT
-          elif ${{ github.event_name == 'pull_request_review' && github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'main' && startsWith(github.ref, 'refs/heads/feature/') }}; then
+          elif ${{ github.event_name == 'pull_request_review' && github.event.review.state == 'approved' && github.event.pull_request.base.ref == 'main' && startsWith(github.event.pull_request.head.ref, 'feature/') }}; then
             echo "QA environment"
             echo "env_version=v10-qa" >> $GITHUB_OUTPUT
           elif ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}; then
