@@ -72,7 +72,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix: 
-        service: ${{ fromJson(needs.setup_deployment.outputs.microservices) }} 
+        service: ['agent-manager', 'backend', 'correlation', 'frontend', 'bdgz', 'mutate', 'o365', 'log-auth-proxy', 'user-auditor', 'web-pdf'] 
     uses: ./.github/workflows/used-runner.yml
     with:
       microservice: ${{ matrix.service }}
