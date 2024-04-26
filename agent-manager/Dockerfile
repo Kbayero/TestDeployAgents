@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-COPY server /app/
+COPY agent-manager /app/
 
 # Install jq
 RUN apt-get update && \
@@ -25,4 +25,4 @@ HEALTHCHECK --interval=60s --timeout=5s --start-period=5s --retries=3 CMD grpcur
 
 
 # Run the server binary
-CMD ["/app/server"]
+CMD ["/app/agent-manager"]
