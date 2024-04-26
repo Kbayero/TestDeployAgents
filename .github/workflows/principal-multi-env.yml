@@ -31,7 +31,6 @@ jobs:
           elif ${{ github.event_name == 'release' }}; then
             echo "RELEASE environment"
             echo "env_version=v10" >> $GITHUB_OUTPUT
-            echo "microservices=['agent-manager', 'backend', 'correlation', 'frontend', 'bdgz', 'mutate', 'o365', 'log-auth-proxy', 'user-auditor', 'web-pdf']" >> $GITHUB_OUTPUT
           fi
 
       - uses: actions/checkout@v2
@@ -56,6 +55,20 @@ jobs:
     name: Deployment
     needs: setup_deployment
     if: ${{ needs.setup_deployment.outputs.microservices != '[]' }}
+    strategy:
+      fail-fast: false
+      matrix: 
+        service: ${{ fromJson(needs.setup_deployment.outputs.microservices) }} 
+    uses: ./.github/workflows/used-runner.yml
+    with:
+      microservice: ${{ matrix.service }}
+      environment: ${{ needs.setup_deployment.outputs.env_version }}
+    secrets: inherit
+  
+  runner_release:
+    name: Deployment for Release
+    needs: setup_deployment
+    if: ${{ needs.setup_deployment.outputs.env_version == 'v10' }}
     strategy:
       fail-fast: false
       matrix: 
