@@ -5,6 +5,9 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/utmstack/UTMStack/correlation/api"
 	"github.com/utmstack/UTMStack/correlation/cache"
 	"github.com/utmstack/UTMStack/correlation/correlation"
@@ -15,9 +18,6 @@ import (
 	"github.com/utmstack/UTMStack/correlation/sqldb"
 	"github.com/utmstack/UTMStack/correlation/statistics"
 	"github.com/utmstack/UTMStack/correlation/utils"
-	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 // @title UTMStack's Correlation Engine
@@ -28,6 +28,8 @@ import (
 // @license.name Private
 // @host localhost:8080
 // @BasePath /v1
+
+//TEst12
 
 func main() {
 	sqldb.Connect()
