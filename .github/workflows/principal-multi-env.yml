@@ -63,5 +63,5 @@ jobs:
     uses: ./.github/workflows/used-runner.yml
     with:
       microservice: ${{ matrix.service }}
-      environment: ${{ needs.setup_deployment.outputs.environment }}
+      environment: ${{ needs.setup_deployment.outputs.env_version }}
     secrets: inherit
