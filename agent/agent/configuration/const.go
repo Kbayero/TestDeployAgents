@@ -18,15 +18,21 @@ const (
 	InitialReconnectDelay        = 10 * time.Second
 	MaxReconnectDelay            = 120 * time.Second
 
-	SERV_NAME       = "UTMStackAgent"
-	SERV_LOG        = "utmstack_agent.log"
-	ModulesServName = "UTMStackModulesLogsCollector"
-	WinServName     = "UTMStackWindowsLogsCollector"
-	ModulesLockName = "utmstack_modules_collector.lock"
-	WinLockName     = "utmstack_windows_collector.lock"
-	RedlineLockName = "utmstack_redline.lock"
-	RedlineServName = "UTMStackRedline"
-	UUIDFileName    = "uuid.yml"
+	SERV_NAME            = "UTMStackAgent"
+	SERV_LOG             = "utmstack_agent.log"
+	ModulesServName      = "UTMStackModulesLogsCollector"
+	WinServName          = "UTMStackWindowsLogsCollector"
+	ModulesLockName      = "utmstack_modules_collector.lock"
+	WinLockName          = "utmstack_windows_collector.lock"
+	RedlineLockName      = "utmstack_redline.lock"
+	RedlineServName      = "UTMStackRedline"
+	CollectorFileName    = "log-collector-configuration.json"
+	CollectorFileNameOld = "log-collector-config.json"
+	UUIDFileName         = "uuid.yml"
+	MESSAGE_HEADER       = "utm_stack_agent_ds"
+	BatchToSend          = 5
+	PortRangeMin         = "7000"
+	PortRangeMax         = "9000"
 )
 
 type LogType string
@@ -68,30 +74,39 @@ const (
 	LogTypeCiscoGeneric        LogType = "cisco"
 	LogTypeMacOs               LogType = "macos_logs"
 	LogTypeGeneric             LogType = "generic"
+	LogTypeNetflow             LogType = "netflow"
+	LogTypeAix                 LogType = "ibm_aix"
+	LogTypePfsense             LogType = "firewall_pfsense"
+	LogTypeFortiweb            LogType = "firewall_fortiweb"
 )
 
 type ProtoPort struct {
 	UDP string
 	TCP string
-	TLS string
 }
 
 var (
 	ProtoPorts = map[LogType]ProtoPort{
-		LogTypeSyslog:         {UDP: "7014", TCP: "7014", TLS: "2056"},
-		LogTypeVmware:         {UDP: "7002", TCP: "7002", TLS: "7052"},
-		LogTypeEset:           {UDP: "7003", TCP: "7003", TLS: "7053"},
-		LogTypeKaspersky:      {UDP: "7004", TCP: "7004", TLS: "7054"},
-		LogTypeCiscoGeneric:   {UDP: "514", TCP: "1470", TLS: ""},
-		LogTypeFortinet:       {UDP: "7005", TCP: "7005", TLS: "7055"},
-		LogTypePaloalto:       {UDP: "7006", TCP: "7006", TLS: "7056"},
-		LogTypeMikrotik:       {UDP: "7007", TCP: "7007", TLS: "7057"},
-		LogTypeSophosXG:       {UDP: "7008", TCP: "7008", TLS: "7058"},
-		LogTypeSonicwall:      {UDP: "7009", TCP: "7009", TLS: "7059"},
-		LogTypeDeceptivebytes: {UDP: "7010", TCP: "7010", TLS: "7060"},
-		LogTypeSentinelOne:    {UDP: "7012", TCP: "7012", TLS: "7062"},
-		LogTypeMacOs:          {UDP: "7015", TCP: "7015", TLS: "7065"},
+		LogTypeSyslog:         {UDP: "7014", TCP: "7014"},
+		LogTypeVmware:         {UDP: "7002", TCP: "7002"},
+		LogTypeEset:           {UDP: "7003", TCP: "7003"},
+		LogTypeKaspersky:      {UDP: "7004", TCP: "7004"},
+		LogTypeCiscoGeneric:   {UDP: "514", TCP: "1470"},
+		LogTypeFortinet:       {UDP: "7005", TCP: "7005"},
+		LogTypePaloalto:       {UDP: "7006", TCP: "7006"},
+		LogTypeMikrotik:       {UDP: "7007", TCP: "7007"},
+		LogTypeSophosXG:       {UDP: "7008", TCP: "7008"},
+		LogTypeSonicwall:      {UDP: "7009", TCP: "7009"},
+		LogTypeDeceptivebytes: {UDP: "7010", TCP: "7010"},
+		LogTypeSentinelOne:    {UDP: "7012", TCP: "7012"},
+		LogTypeMacOs:          {UDP: "7015", TCP: "7015"},
+		LogTypeAix:            {UDP: "7016", TCP: "7016"},
+		LogTypePfsense:        {UDP: "7017", TCP: "7017"},
+		LogTypeFortiweb:       {UDP: "7018", TCP: "7018"},
+		LogTypeNetflow:        {UDP: "2055", TCP: ""},
 	}
+
+	ProhibitedPortsChange = []LogType{LogTypeCiscoGeneric, LogTypeNetflow}
 )
 
 func GetCertPath() string {
@@ -109,6 +124,16 @@ func GetCaPath() string {
 	return filepath.Join(path, "certs", "ca.crt")
 }
 
+func GetCollectorConfigPath() string {
+	path, _ := utils.GetMyPath()
+	return filepath.Join(path, CollectorFileName)
+}
+
+func GetCollectorConfigPathOld() string {
+	path, _ := utils.GetMyPath()
+	return filepath.Join(path, CollectorFileNameOld)
+}
+
 func GetAgentBin() string {
 	var bin string
 	switch runtime.GOOS {
@@ -118,4 +143,25 @@ func GetAgentBin() string {
 		bin = "utmstack_agent_service"
 	}
 	return bin
+}
+
+func GetMessageFormated(host string, msg string) string {
+	return "[" + MESSAGE_HEADER + "=" + host + "]-" + msg
+}
+
+func ValidateModuleType(typ LogType) string {
+	switch typ {
+	case LogTypeSyslog, LogTypeVmware, LogTypeEset, LogTypeKaspersky, LogTypeFortinet, LogTypePaloalto,
+		LogTypeMikrotik, LogTypeSophosXG, LogTypeSonicwall, LogTypeSentinelOne, LogTypeCiscoGeneric, LogTypeMacOs,
+		LogTypeDeceptivebytes, LogTypeAix, LogTypePfsense, LogTypeFortiweb:
+		return "syslog"
+	case LogTypeNetflow:
+		return "netflow"
+	case LogTypeWindowsAgent, LogTypeLinuxAgent, LogTypeTraefikModule, LogTypeMongodbModule, LogTypeMysqlModule, LogTypePostgresqlModule,
+		LogTypeRedisModule, LogTypeElasticsearchModule, LogTypeKafkaModule, LogTypeKibanaModule, LogTypeLogstashModule, LogTypeNatsModule,
+		LogTypeOsqueryModule, LogTypeLinuxAuditdModule, LogTypeHaproxyModule, LogTypeNginxModule, LogTypeIisModule, LogTypeApacheModule:
+		return "beats"
+	default:
+		return "nil"
+	}
 }
