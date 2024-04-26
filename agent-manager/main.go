@@ -17,6 +17,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+// main is the entry point for the application
 func main() {
 	defer func() {
 		if r := recover(); r != nil {
