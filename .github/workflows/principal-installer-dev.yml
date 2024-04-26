@@ -2,7 +2,7 @@ name: Installer Dev
 
 on:
   workflow_run:
-    workflows: ["Dev/Rc Deploy"]
+    workflows: ["Multi Environment Build"]
     types:
       - completed
 
@@ -31,3 +31,9 @@ jobs:
     steps:
     - name: Check out code into the right branch
       uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.workflow_run.head_branch }}
+
+    - name: Print version.yml
+      run: cat version.yml
+      
