@@ -42,3 +42,6 @@ jobs:
       run : |
         echo "Creating release"
         echo "Release created"
+
+    - name: Print version.yml
+      run: cat version.yml

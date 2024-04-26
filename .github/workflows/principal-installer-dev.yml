@@ -27,7 +27,7 @@ jobs:
     name: Deploy to dev
     needs: check_feature
     if: needs.check_feature.outputs.is_feature == 'true'
-    runs-on: dev
+    runs-on: ubuntu-latest
     steps:
     - name: Check out code into the right branch
       uses: actions/checkout@v4
