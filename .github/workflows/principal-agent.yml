@@ -1,7 +1,8 @@
 name: Agent Build
 on:
+  release:
+    types: [ 'released' ]
   push:
-    tags: [ 'v*' ]
     branches: [ 'main', 'feature/**' ]
     paths:
       - 'agent/**'
@@ -31,7 +32,7 @@ jobs:
           elif ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}; then
             echo "RC environment"
             echo "env_version=v10-rc" >> $GITHUB_OUTPUT
-          elif ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}; then
+          elif ${{ github.event_name == 'release' }}; then
             echo "RELEASE environment"
             echo "env_version=release" >> $GITHUB_OUTPUT
           fi
