@@ -25,7 +25,7 @@ func main() {
 		h.Fatal("failed to get current path: %v", err)
 	}
 
-	// Generate Certificates.
+	// Generate Certificates..
 	certsPath := filepath.Join(path, "certs")
 	err = utils.CreatePathIfNotExist(certsPath)
 	if err != nil {
