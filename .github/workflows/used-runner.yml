@@ -40,7 +40,7 @@ jobs:
         shell: bash
 
   basic_deployment:
-    name: ${{inputs.microservice}} deployment
+    name: Basic deployment
     needs: prepare_deployment
     if: ${{ needs.prepare_deployment.outputs.tech == 'basic' }}
     uses: ./.github/workflows/used-docker-basic.yml
@@ -49,7 +49,7 @@ jobs:
       environment: ${{inputs.environment}}
   
   frontend_deployment:
-    name: ${{inputs.microservice}} deployment
+    name: Frontend deployment
     needs: prepare_deployment
     if: ${{ needs.prepare_deployment.outputs.tech == 'frontend' }}
     uses: ./.github/workflows/used-docker-frontend.yml
@@ -58,7 +58,7 @@ jobs:
       environment: ${{inputs.environment}}
 
   golang_deployment:
-    name: ${{inputs.microservice}} deployment
+    name: Golang deployment
     needs: prepare_deployment
     if: ${{ needs.prepare_deployment.outputs.tech == 'golang' }}
     uses: ./.github/workflows/used-docker-golang.yml
@@ -67,7 +67,7 @@ jobs:
       environment: ${{inputs.environment}}
 
   java_11_deployment:
-    name: ${{inputs.microservice}} deployment
+    name: Java 11 deployment
     needs: prepare_deployment
     if: ${{ needs.prepare_deployment.outputs.tech == 'java-11' }}
     uses: ./.github/workflows/used-docker-java-11.yml
@@ -76,7 +76,7 @@ jobs:
       environment: ${{inputs.environment}}
 
   java_deployment:
-    name: ${{inputs.microservice}} deployment
+    name: Java deployment
     needs: prepare_deployment
     if: ${{ needs.prepare_deployment.outputs.tech == 'java' }}
     uses: ./.github/workflows/used-docker-java.yml
