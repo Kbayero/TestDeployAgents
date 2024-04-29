@@ -19,7 +19,7 @@ import (
 )
 
 func main() {
-	// Teste
+	// Teste1
 	autService := logservice.NewLogAuthService()
 	go autService.SyncAuth()
 	authInterceptor := middleware.NewLogAuthInterceptor(autService)
