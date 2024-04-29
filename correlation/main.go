@@ -29,7 +29,7 @@ import (
 // @host localhost:8080
 // @BasePath /v1
 
-//TEst1
+//TEst2
 
 func main() {
 	sqldb.Connect()
