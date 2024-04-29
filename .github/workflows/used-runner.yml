@@ -45,6 +45,9 @@ jobs:
     if: ${{ needs.prepare_deployment.outputs.tech != 'unknown' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
       - name: Deploy Basic
         if: ${{ needs.prepare_deployment.outputs.tech == 'basic' }}
         uses: ./.github/workflows/used-docker-basic.yml
