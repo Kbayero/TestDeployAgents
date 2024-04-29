@@ -16,7 +16,7 @@ jobs:
       - id: check
         run: |
           echo ${{ github.event.workflow_run.event }}
-          if ${{ startsWith(github.event.workflow_run.head_branch, 'feature/') && github.event.workflow_run.event != 'pull_request_review'}}; then
+          if ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/heads/feature/') }}; then
             echo "It's a feature"
             echo "is_feature=true" >> $GITHUB_OUTPUT
           else

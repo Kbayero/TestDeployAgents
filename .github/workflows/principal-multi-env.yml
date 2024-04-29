@@ -54,7 +54,7 @@ jobs:
   runner:
     name: Deployment
     needs: setup_deployment
-    if: ${{ needs.setup_deployment.outputs.microservices != '[]' }}
+    if: ${{ needs.setup_deployment.outputs.microservices != '[]' && needs.setup_deployment.outputs.env_version != ''}}
     strategy:
       fail-fast: false
       matrix: 
