@@ -45,8 +45,12 @@ jobs:
     if: ${{ needs.prepare_deployment.outputs.tech != 'unknown' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Show results
-        run: |
-          echo ./.github/workflows/used-docker-${{ needs.prepare_deployment.outputs.tech }}.yml
-          echo image_name: ${{ inputs.microservice }}
-          echo environment: ${{inputs.environment}}
+      - name: Define dependencies
+        env:
+          FILENAME: ./.github/workflows/used-docker-${{ needs.prepare_deployment.outputs.tech }}.yml
+        run: echo $FILENAME
+
+      - uses: $ {{ env.FILENAME}}
+        with:
+          image_name: ${{ inputs.microservice }}
+          environment: ${{inputs.environment}}
